@@ -12,6 +12,7 @@ interface AuthContextType {
   logout: () => Promise<void>;
   isAuthority: () => boolean;
   loginError: string | null;
+  getUserDisplayName: () => string;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -74,6 +75,18 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return false;
   };
 
+  // Helper function to get display name from user metadata or email
+  const getUserDisplayName = () => {
+    if (!user) return '';
+    
+    // Try to get the name from user metadata first
+    const fullName = user.user_metadata?.full_name;
+    if (fullName) return fullName;
+    
+    // Fallback to email
+    return user.email?.split('@')[0] || 'User';
+  };
+
   return (
     <AuthContext.Provider 
       value={{ 
@@ -83,7 +96,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         login, 
         logout,
         isAuthority,
-        loginError
+        loginError,
+        getUserDisplayName
       }}
     >
       {children}

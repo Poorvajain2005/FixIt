@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
@@ -37,6 +36,13 @@ const Dashboard = () => {
     return null; // Redirecting to login, don't render anything
   }
 
+  // Create a compatible user object for UserContributions component
+  const adaptedUser = {
+    id: user.id,
+    email: user.email || '',
+    // Other properties required by UserContributions
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
       <Navbar />
@@ -65,7 +71,7 @@ const Dashboard = () => {
           
           {!isAuthority() && (
             <div className="mb-8">
-              <UserContributions user={user} />
+              <UserContributions user={adaptedUser as any} />
             </div>
           )}
           

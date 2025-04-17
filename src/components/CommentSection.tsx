@@ -13,7 +13,7 @@ interface CommentSectionProps {
 
 const CommentSection = ({ issueId, comments, onCommentAdded }: CommentSectionProps) => {
   const [newComment, setNewComment] = useState('');
-  const { user, isAuthenticated } = useAuth();
+  const { user, isAuthenticated, getUserDisplayName } = useAuth();
   const { toast } = useToast();
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -59,7 +59,7 @@ const CommentSection = ({ issueId, comments, onCommentAdded }: CommentSectionPro
         <form onSubmit={handleSubmit} className="mb-6">
           <div className="flex items-start space-x-3">
             <div className="avatar">
-              {user?.name.charAt(0)}
+              {getUserDisplayName().charAt(0)}
             </div>
             <div className="flex-grow">
               <textarea

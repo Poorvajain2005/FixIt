@@ -5,7 +5,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 
 const Navbar = () => {
-  const { user, isAuthenticated, logout, isAuthority } = useAuth();
+  const { user, isAuthenticated, logout, isAuthority, getUserDisplayName } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
@@ -46,7 +46,7 @@ const Navbar = () => {
             ) : (
               <div className="flex items-center space-x-3">
                 <div className="text-sm text-gray-600">
-                  Hello, {user?.name}
+                  Hello, {getUserDisplayName()}
                   {isAuthority() && <span className="ml-1 text-xs text-fixit-primary">(Authority)</span>}
                 </div>
                 <Button 
@@ -137,7 +137,7 @@ const Navbar = () => {
             ) : (
               <div className="pt-2 border-t border-gray-200">
                 <div className="px-3 py-2 text-sm text-gray-600">
-                  Hello, {user?.name}
+                  Hello, {getUserDisplayName()}
                   {isAuthority() && <span className="ml-1 text-xs text-fixit-primary">(Authority)</span>}
                 </div>
                 <button
