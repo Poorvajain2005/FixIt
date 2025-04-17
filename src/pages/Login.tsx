@@ -4,13 +4,16 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import Navbar from '../components/Navbar';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { AlertCircle } from 'lucide-react';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const { login } = useAuth();
+  const { login, loginError } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -47,7 +50,11 @@ const Login = () => {
   const handleDemoLogin = async (role: 'citizen' | 'authority') => {
     setIsLoading(true);
     try {
+      // Fill in the fields for users to see what credentials are being used
       const demoEmail = role === 'citizen' ? 'jane@example.com' : 'admin@cityworks.gov';
+      setEmail(demoEmail);
+      setPassword('password');
+      
       const user = await login(demoEmail, 'password');
       if (user) {
         toast({
@@ -84,35 +91,42 @@ const Login = () => {
             </p>
           </div>
           
+          {loginError && (
+            <Alert variant="destructive" className="mb-4">
+              <AlertCircle className="h-4 w-4" />
+              <AlertDescription>
+                {loginError}
+              </AlertDescription>
+            </Alert>
+          )}
+          
           <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-            <div className="rounded-md shadow-sm -space-y-px">
+            <div className="space-y-4">
               <div>
-                <label htmlFor="email-address" className="sr-only">
+                <label htmlFor="email-address" className="block text-sm font-medium text-gray-700 mb-1">
                   Email address
                 </label>
-                <input
+                <Input
                   id="email-address"
                   name="email"
                   type="email"
                   autoComplete="email"
                   required
-                  className="input-field rounded-t-md"
                   placeholder="Email address"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
               <div>
-                <label htmlFor="password" className="sr-only">
+                <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
                   Password
                 </label>
-                <input
+                <Input
                   id="password"
                   name="password"
                   type="password"
                   autoComplete="current-password"
                   required
-                  className="input-field rounded-b-md"
                   placeholder="Password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -128,6 +142,13 @@ const Login = () => {
               >
                 {isLoading ? 'Logging in...' : 'Sign in'}
               </Button>
+            </div>
+            
+            <div className="text-center text-sm">
+              <p>Demo credentials:</p>
+              <p className="text-gray-500">Citizen: jane@example.com</p>
+              <p className="text-gray-500">Authority: admin@cityworks.gov</p>
+              <p className="text-gray-500">Password: password</p>
             </div>
           </form>
           
