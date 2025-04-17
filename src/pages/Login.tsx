@@ -22,51 +22,15 @@ const Login = () => {
     setIsLoading(true);
 
     try {
-      const user = await login(email, password);
-      if (user) {
-        toast({
-          title: "Login Successful",
-          description: `Welcome back, ${user.name}!`,
-        });
-        navigate('/dashboard');
-      } else {
-        toast({
-          title: "Login Failed",
-          description: "Invalid email or password. Try again or use demo credentials.",
-          variant: "destructive"
-        });
-      }
-    } catch (error) {
+      await login(email, password);
       toast({
-        title: "Login Error",
-        description: "An error occurred during login. Please try again.",
-        variant: "destructive"
+        title: "Login Successful",
+        description: "Welcome back!",
       });
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleDemoLogin = async (role: 'citizen' | 'authority') => {
-    setIsLoading(true);
-    try {
-      // Fill in the fields for users to see what credentials are being used
-      const demoEmail = role === 'citizen' ? 'jane@example.com' : 'admin@cityworks.gov';
-      setEmail(demoEmail);
-      setPassword('password');
-      
-      const user = await login(demoEmail, 'password');
-      if (user) {
-        toast({
-          title: "Demo Login Successful",
-          description: `Logged in as ${user.name} (${role}).`,
-        });
-        navigate('/dashboard');
-      }
     } catch (error) {
       toast({
-        title: "Demo Login Error",
-        description: "An error occurred. Please try again.",
+        title: "Login Failed",
+        description: "Please check your credentials and try again.",
         variant: "destructive"
       });
     } finally {
@@ -92,7 +56,7 @@ const Login = () => {
           </div>
           
           {loginError && (
-            <Alert variant="destructive" className="mb-4">
+            <Alert variant="destructive">
               <AlertCircle className="h-4 w-4" />
               <AlertDescription>
                 {loginError}
@@ -143,46 +107,7 @@ const Login = () => {
                 {isLoading ? 'Logging in...' : 'Sign in'}
               </Button>
             </div>
-            
-            <div className="text-center text-sm">
-              <p>Demo credentials:</p>
-              <p className="text-gray-500">Citizen: jane@example.com</p>
-              <p className="text-gray-500">Authority: admin@cityworks.gov</p>
-              <p className="text-gray-500">Password: password</p>
-            </div>
           </form>
-          
-          <div className="mt-6">
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-300"></div>
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-white text-gray-500">Or use demo accounts</span>
-              </div>
-            </div>
-
-            <div className="mt-6 grid grid-cols-2 gap-3">
-              <Button
-                type="button"
-                variant="outline"
-                className="w-full"
-                onClick={() => handleDemoLogin('citizen')}
-                disabled={isLoading}
-              >
-                Demo Citizen
-              </Button>
-              <Button
-                type="button"
-                variant="outline"
-                className="w-full"
-                onClick={() => handleDemoLogin('authority')}
-                disabled={isLoading}
-              >
-                Demo Authority
-              </Button>
-            </div>
-          </div>
         </div>
       </div>
     </div>
