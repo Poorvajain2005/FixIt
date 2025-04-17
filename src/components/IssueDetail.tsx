@@ -1,9 +1,12 @@
-import { useState } from 'react';
-import { Issue, updateIssueStatus, Comment, upvoteIssue } from '../utils/mockData';
+import { useState, useEffect } from 'react';
+import { Issue, updateIssueStatus, Comment, upvoteIssue, viewIssue } from '../utils/mockData';
 import { useAuth } from '../contexts/AuthContext';
 import CommentSection from './CommentSection';
+import IssueTimeline from './IssueTimeline';
+import EngagementMetrics from './EngagementMetrics';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
+import { AlertCircleIcon, AlertTriangleIcon, CalendarIcon } from 'lucide-react';
 import Map from './Map';
 
 interface IssueDetailProps {
@@ -12,8 +15,13 @@ interface IssueDetailProps {
 
 const IssueDetail = ({ issue: initialIssue }: IssueDetailProps) => {
   const [issue, setIssue] = useState<Issue>(initialIssue);
-  const { isAuthority } = useAuth();
+  const { isAuthority, user } = useAuth();
   const { toast } = useToast();
+  
+  // Record view on initial load
+  useEffect(() => {
+    viewIssue(issue.id);
+  }, [issue.id]);
 
   const statusClass = 
     issue.status === 'open' 
@@ -28,6 +36,24 @@ const IssueDetail = ({ issue: initialIssue }: IssueDetailProps) => {
       : issue.status === 'in-progress' 
         ? 'In Progress' 
         : 'Resolved';
+  
+  const priorityClass = 
+    issue.priority === 'emergency' 
+      ? 'bg-red-600 text-white' 
+      : issue.priority === 'high' 
+        ? 'bg-orange-500 text-white' 
+        : issue.priority === 'medium' 
+          ? 'bg-yellow-500 text-white' 
+          : 'bg-blue-500 text-white';
+          
+  const priorityLabel = 
+    issue.priority === 'emergency' 
+      ? 'EMERGENCY' 
+      : issue.priority === 'high' 
+        ? 'High Priority' 
+        : issue.priority === 'medium' 
+          ? 'Medium Priority' 
+          : 'Low Priority';
 
   const handleStatusChange = (newStatus: 'open' | 'in-progress' | 'resolved') => {
     const updatedIssue = updateIssueStatus(issue.id, newStatus);
@@ -64,35 +90,33 @@ const IssueDetail = ({ issue: initialIssue }: IssueDetailProps) => {
     <div className="max-w-4xl mx-auto">
       <div className="bg-white rounded-lg shadow-md overflow-hidden">
         <div className="p-6">
-          <div className="flex justify-between items-start">
-            <div>
-              <div className="flex items-center mb-2">
+          <div className="flex justify-between items-start flex-wrap">
+            <div className="mb-2 sm:mb-0">
+              <div className="flex flex-wrap items-center gap-2 mb-2">
+                {issue.priority === 'emergency' && (
+                  <span className="flex items-center bg-red-600 text-white px-2 py-1 rounded-full text-xs font-bold">
+                    <AlertTriangleIcon className="w-3 h-3 mr-1" />
+                    EMERGENCY
+                  </span>
+                )}
                 <h2 className="text-2xl font-bold text-gray-900">{issue.title}</h2>
-                <span className={`${statusClass} ml-3`}>{statusLabel}</span>
+                <span className={`${statusClass} ml-0 sm:ml-2`}>{statusLabel}</span>
+                
+                {issue.priority !== 'emergency' && (
+                  <span className={`text-xs px-2 py-1 rounded-full ${priorityClass}`}>
+                    {priorityLabel}
+                  </span>
+                )}
+                
+                {issue.isVerified && (
+                  <span className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">
+                    Verified
+                  </span>
+                )}
               </div>
               <div className="text-sm text-gray-500 mb-4">
                 Reported by {issue.reportedByName} on {new Date(issue.createdAt).toLocaleDateString()}
               </div>
-            </div>
-            
-            <div className="flex items-center space-x-2">
-              <div className="flex items-center space-x-1">
-                <span className="text-sm font-semibold">{issue.upvotes}</span>
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 text-gray-600">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M6.633 10.5c.806 0 1.533-.446 2.031-1.08a9.041 9.041 0 012.861-2.4c.723-.384 1.35-.956 1.653-1.715a4.498 4.498 0 00.322-1.672V3a.75.75 0 01.75-.75A2.25 2.25 0 0116.5 4.5c0 1.152-.26 2.243-.723 3.218-.266.558.107 1.282.725 1.282h3.126c1.026 0 1.945.694 2.054 1.715.045.422.068.85.068 1.285a11.95 11.95 0 01-2.649 7.521c-.388.482-.987.729-1.605.729H13.48c-.483 0-.964-.078-1.423-.23l-3.114-1.04a4.501 4.501 0 00-1.423-.23H5.904M14.25 9h2.25M5.904 18.75c.083.205.173.405.27.602.197.4-.078.898-.523.898h-.908c-.889 0-1.713-.518-1.972-1.368a12 12 0 01-.521-3.507c0-1.553.295-3.036.831-4.398C3.387 10.203 4.167 9.75 5 9.75h1.053c.472 0 .745.556.5.96a8.958 8.958 0 00-1.302 4.665c0 1.194.232 2.333.654 3.375z" />
-                </svg>
-              </div>
-              
-              {issue.status !== 'resolved' && (
-                <Button 
-                  variant="outline" 
-                  size="sm"
-                  className="text-fixit-primary border-fixit-primary"
-                  onClick={handleUpvote}
-                >
-                  Upvote
-                </Button>
-              )}
             </div>
           </div>
           
@@ -103,16 +127,24 @@ const IssueDetail = ({ issue: initialIssue }: IssueDetailProps) => {
                 <p className="text-gray-700 whitespace-pre-line">{issue.description}</p>
               </div>
               
-              <div>
+              <div className="border-b pb-4 mb-4">
                 <h3 className="text-lg font-semibold mb-2">Details</h3>
-                <div className="grid grid-cols-2 gap-x-4 gap-y-2">
+                <div className="grid grid-cols-2 gap-x-4 gap-y-3">
                   <div>
                     <span className="text-sm text-gray-500">Category</span>
                     <p className="font-medium">{issue.category}</p>
                   </div>
                   <div>
+                    <span className="text-sm text-gray-500">Priority</span>
+                    <p className="font-medium capitalize">{issue.priority}</p>
+                  </div>
+                  <div>
                     <span className="text-sm text-gray-500">Location</span>
                     <p className="font-medium">{issue.location}</p>
+                  </div>
+                  <div>
+                    <span className="text-sm text-gray-500">Status</span>
+                    <p className="font-medium capitalize">{issue.status.replace('-', ' ')}</p>
                   </div>
                   <div>
                     <span className="text-sm text-gray-500">Reported</span>
@@ -122,12 +154,43 @@ const IssueDetail = ({ issue: initialIssue }: IssueDetailProps) => {
                     <span className="text-sm text-gray-500">Last Updated</span>
                     <p className="font-medium">{new Date(issue.updatedAt).toLocaleDateString()}</p>
                   </div>
+                  
+                  {issue.estimatedCompletionDate && (
+                    <div className="col-span-2">
+                      <span className="text-sm text-gray-500 flex items-center">
+                        <CalendarIcon className="w-4 h-4 mr-1 text-fixit-primary" />
+                        Estimated Resolution Date
+                      </span>
+                      <p className="font-medium">
+                        {new Date(issue.estimatedCompletionDate).toLocaleDateString()}
+                      </p>
+                    </div>
+                  )}
+                  
+                  {issue.actualCompletionDate && (
+                    <div className="col-span-2">
+                      <span className="text-sm text-gray-500 flex items-center">
+                        <CalendarIcon className="w-4 h-4 mr-1 text-fixit-success" />
+                        Resolved On
+                      </span>
+                      <p className="font-medium">
+                        {new Date(issue.actualCompletionDate).toLocaleDateString()}
+                      </p>
+                    </div>
+                  )}
                 </div>
+              </div>
+              
+              <div className="border-b pb-4 mb-4">
+                <IssueTimeline timeline={issue.statusTimeline} />
               </div>
               
               {isAuthority() && (
                 <div className="mt-6 p-4 bg-gray-50 rounded-lg">
-                  <h3 className="text-lg font-semibold mb-3">Authority Actions</h3>
+                  <h3 className="text-lg font-semibold mb-3 flex items-center">
+                    <AlertCircleIcon className="w-5 h-5 mr-2 text-fixit-primary" />
+                    Authority Actions
+                  </h3>
                   <div className="flex flex-wrap gap-2">
                     {issue.status !== 'open' && (
                       <Button 
@@ -160,9 +223,18 @@ const IssueDetail = ({ issue: initialIssue }: IssueDetailProps) => {
               )}
             </div>
             
-            <div>
+            <div className="space-y-6">
+              <EngagementMetrics 
+                issueId={issue.id}
+                upvotes={issue.upvotes}
+                views={issue.views}
+                shares={issue.shares}
+                tags={issue.tags}
+                onUpvote={handleUpvote}
+              />
+              
               {issue.images.length > 0 && (
-                <div className="mb-4">
+                <div>
                   <h3 className="text-lg font-semibold mb-2">Images</h3>
                   <div className="space-y-2">
                     {issue.images.map((image, index) => (
@@ -182,12 +254,13 @@ const IssueDetail = ({ issue: initialIssue }: IssueDetailProps) => {
                 {issue.coordinates ? (
                   <Map 
                     coordinates={issue.coordinates} 
-                    height="h-40" 
+                    height="h-48" 
                     showControls={false} 
+                    zoomLevel={14}
                   />
                 ) : (
                   <Map 
-                    height="h-40" 
+                    height="h-48" 
                     showControls={false} 
                   />
                 )}
