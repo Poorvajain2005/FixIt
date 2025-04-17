@@ -1,4 +1,3 @@
-
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
@@ -11,6 +10,7 @@ interface AuthContextType {
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
   isAuthority: () => boolean;
+  isAdmin: () => boolean;
   loginError: string | null;
   getUserDisplayName: () => string;
 }
@@ -24,7 +24,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Set up auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (_event, session) => {
         setSession(session);
@@ -32,7 +31,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       }
     );
 
-    // Check for existing session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setUser(session?.user ?? null);
@@ -71,19 +69,23 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const isAuthority = () => {
-    // You can implement role-based logic here later
     return false;
   };
 
-  // Helper function to get display name from user metadata or email
+  const isAdmin = () => {
+    const adminEmails = [
+      'admin@cityworks.gov',
+      'your-admin-email@example.com'
+    ];
+    return user ? adminEmails.includes(user.email || '') : false;
+  };
+
   const getUserDisplayName = () => {
     if (!user) return '';
     
-    // Try to get the name from user metadata first
     const fullName = user.user_metadata?.full_name;
     if (fullName) return fullName;
     
-    // Fallback to email
     return user.email?.split('@')[0] || 'User';
   };
 
@@ -96,6 +98,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         login, 
         logout,
         isAuthority,
+        isAdmin,
         loginError,
         getUserDisplayName
       }}

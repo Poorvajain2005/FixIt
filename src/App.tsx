@@ -13,6 +13,7 @@ import Dashboard from "./pages/Dashboard";
 import IssueView from "./pages/IssueView";
 import NotFound from "./pages/NotFound";
 import IndiaMap from "./pages/IndiaMap";
+import AdminPanel from "./pages/AdminPanel";  // Import the new admin panel
 
 const queryClient = new QueryClient();
 
@@ -30,6 +31,7 @@ const App = () => (
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/issues/:issueId" element={<IssueView />} />
             <Route path="/india-map" element={<IndiaMap />} />
+            <Route path="/admin" element={<AdminPanel />} />  {/* Add admin panel route */}
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthProvider>

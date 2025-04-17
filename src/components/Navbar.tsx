@@ -1,11 +1,10 @@
-
 import { Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 
 const Navbar = () => {
-  const { user, isAuthenticated, logout, isAuthority, getUserDisplayName } = useAuth();
+  const { user, isAuthenticated, logout, isAuthority, isAdmin, getUserDisplayName } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
@@ -18,7 +17,6 @@ const Navbar = () => {
             </Link>
           </div>
 
-          {/* Desktop menu */}
           <div className="hidden md:flex items-center space-x-4">
             <Link to="/" className="text-gray-700 hover:text-fixit-primary px-3 py-2 rounded-md">
               Home
@@ -58,9 +56,14 @@ const Navbar = () => {
                 </Button>
               </div>
             )}
+
+            {isAuthenticated && isAdmin() && (
+              <Link to="/admin" className="text-gray-700 hover:text-fixit-primary px-3 py-2 rounded-md">
+                Admin Panel
+              </Link>
+            )}
           </div>
 
-          {/* Mobile menu button */}
           <div className="md:hidden">
             <Button
               variant="ghost"
@@ -95,7 +98,6 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile menu */}
       {isMobileMenuOpen && (
         <div className="md:hidden">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
@@ -150,6 +152,16 @@ const Navbar = () => {
                   Logout
                 </button>
               </div>
+            )}
+
+            {isAuthenticated && isAdmin() && (
+              <Link
+                to="/admin"
+                className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-fixit-primary hover:bg-gray-50"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Admin Panel
+              </Link>
             )}
           </div>
         </div>
