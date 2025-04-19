@@ -99,7 +99,7 @@ const Index = () => {
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold">How FixIt Goes Beyond Swachhata</h2>
             <p className="text-gray-600 mt-3 max-w-2xl mx-auto">
-              FixIt takes civic issue reporting to the next level with features that actually solve problems faster
+              Solving urban problems with innovative community-driven solutions
             </p>
           </div>
           
