@@ -1,0 +1,36 @@
+// app/layout.tsx
+import type { Metadata } from 'next';
+import './globals.css';
+
+import { AuthProvider } from '@/context/AuthContext';
+import Loading from '@/components/Loading';
+
+import { Toaster } from "@/components/ui/toaster";
+
+// Inside your layout component
+<>
+  {/* Your existing content */}
+  <Toaster />
+</>
+
+export const metadata: Metadata = {
+  title: 'FixIt Local',
+  description: 'Report and track local issues in your community.',
+};
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  return (
+    <html lang="en" suppressHydrationWarning>
+      <body className="antialiased">
+        <AuthProvider>
+          {children}
+        </AuthProvider>
+        <Toaster />
+      </body>
+    </html>
+  );
+}
