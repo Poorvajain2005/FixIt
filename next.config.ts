@@ -11,18 +11,30 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: 'picsum.photos',
-        port: '',
-        pathname: '/**',
+        protocol: "https",
+        hostname: "picsum.photos",
+        port: "",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+        port: "",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "upload.wikimedia.org", // Added this line
+        port: "",
+        pathname: "/**",
       },
       // Add leaflet tile servers
       {
-        protocol: 'https',
-        hostname: '*.tile.openstreetmap.org', // Allows a.tile, b.tile, etc.
-        port: '',
-        pathname: '/**',
-      }
+        protocol: "https",
+        hostname: "*.tile.openstreetmap.org", // Allows a.tile, b.tile, etc.
+        port: "",
+        pathname: "/**",
+      },
     ],
   },
 };
