@@ -3,15 +3,10 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 import { AuthProvider } from '@/context/AuthContext';
+import { ThemeProvider } from '@/context/ThemeContext';
 import Loading from '@/components/Loading';
 
 import { Toaster } from "@/components/ui/toaster";
-
-// Inside your layout component
-<>
-  {/* Your existing content */}
-  <Toaster />
-</>
 
 export const metadata: Metadata = {
   title: 'FixIt Local',
@@ -26,9 +21,11 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className="antialiased">
-        <AuthProvider>
-          {children}
-        </AuthProvider>
+        <ThemeProvider>
+          <AuthProvider>
+            {children}
+          </AuthProvider>
+        </ThemeProvider>
         <Toaster />
       </body>
     </html>

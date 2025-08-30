@@ -17,12 +17,30 @@ import {
   MapPin,
   Star,
 } from "lucide-react";
+import { useEffect, useState } from "react";
+
+import { useTheme } from "@/context/ThemeContext";
+
+function ThemeToggle() {
+  const { theme, toggleTheme } = useTheme();
+
+  return (
+    <button
+      onClick={toggleTheme}
+      aria-label="Toggle Dark Mode"
+      className="text-2xl"
+      title={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+    >
+      {theme === "dark" ? "🌙" : "☀️"}
+    </button>
+  );
+}
 
 export default function LandingPage() {
   return (
-    <div className="flex flex-col min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-black text-white">
+    <div className="flex flex-col min-h-screen bg-background text-foreground">
       {/* Header */}
-      <header className="sticky top-0 z-50 w-full border-b border-white/10 bg-black/60 backdrop-blur-xl">
+      <header className="sticky top-0 z-50 w-full border-b border-border/10 bg-background/60 backdrop-blur-xl">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
           <Link
             href="/"
@@ -46,6 +64,7 @@ export default function LandingPage() {
             </Link>
           </nav>
           <div className="flex items-center gap-2">
+            <ThemeToggle />
             <Button variant="outline" size="sm" asChild>
               <Link href="/login/citizen">Citizen Login</Link>
             </Button>
@@ -80,15 +99,22 @@ export default function LandingPage() {
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1 }}
-          className="text-5xl md:text-7xl font-extrabold tracking-tight mb-4"
+          className="text-5xl md:text-7xl font-extrabold tracking-tight mb-4 flex items-center justify-center gap-4"
         >
+          <Image
+            src="/swachbharat.png"
+            alt="Swachh Bharat"
+            width={80}
+            height={40}
+            className="inline-block"
+          />
           Swachh Bharat, <span className="text-primary">Swachh Future</span>
         </motion.h1>
         <motion.p
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2, duration: 1 }}
-          className="max-w-2xl mx-auto text-lg md:text-2xl text-gray-200 mb-10"
+          className="max-w-2xl mx-auto text-lg md:text-2xl text-muted-foreground mb-10"
         >
           FixIt Local connects citizens and authorities for a cleaner, safer,
           and more vibrant neighborhood. Report, track, and resolve civic issues
@@ -121,32 +147,22 @@ export default function LandingPage() {
       </section>
 
       {/* Trusted By Section */}
-      <section className="py-10 bg-gradient-to-r from-gray-900/80 to-black/80 border-y border-gray-800">
+      <section className="py-10 bg-gradient-to-r from-muted/80 to-background/80 border-y border-border">
         <div className="container mx-auto px-6 text-center">
-          <h3 className="text-lg font-semibold text-gray-300 mb-4">
+          <h3 className="text-lg font-semibold text-muted-foreground mb-4">
             Trusted by communities & organizations
           </h3>
           <div className="flex flex-wrap justify-center items-center gap-8 opacity-80">
             <Image
-              src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Swachh_Bharat_Abhiyan_Logo.svg/320px-Swachh_Bharat_Abhiyan_Logo.svg.png"
+              src="/swachbharat.png"
               alt="Swachh Bharat"
               width={80}
               height={40}
             />
+            <Image src="/govt.png" alt="Govt" width={60} height={40} />
+            <Image src="/unicef.png" alt="UNICEF" width={80} height={40} />
             <Image
-              src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Indian_Government_Emblem.png/320px-Indian_Government_Emblem.png"
-              alt="Govt"
-              width={60}
-              height={40}
-            />
-            <Image
-              src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/UNICEF_Logo.png/320px-UNICEF_Logo.png"
-              alt="UNICEF"
-              width={80}
-              height={40}
-            />
-            <Image
-              src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/World_Bank_logo.svg/320px-World_Bank_logo.svg.png"
+              src="/worldbnk.png"
               alt="World Bank"
               width={80}
               height={40}
@@ -156,7 +172,7 @@ export default function LandingPage() {
       </section>
 
       {/* Features Section */}
-      <section id="features" className="py-24 bg-gray-900/50">
+      <section id="features" className="py-24 bg-muted/50">
         <div className="container mx-auto px-6">
           <h2 className="text-4xl font-bold text-center mb-16">
             Why Use FixIt Local?
@@ -185,7 +201,7 @@ export default function LandingPage() {
       </section>
 
       {/* Testimonial Section */}
-      <section className="py-20 bg-gradient-to-r from-primary/10 to-pink-500/10 border-y border-gray-800">
+      <section className="py-20 bg-gradient-to-r from-primary/10 to-accent/10 border-y border-border">
         <div className="container mx-auto px-6 text-center">
           <h2 className="text-3xl font-bold mb-10">What Citizens Say</h2>
           <div className="flex flex-col md:flex-row gap-8 justify-center">
@@ -209,7 +225,7 @@ export default function LandingPage() {
       </section>
 
       {/* Steps Section */}
-      <section id="how-it-works" className="py-24 bg-black">
+      <section id="how-it-works" className="py-24 bg-card">
         <div className="container mx-auto px-6 text-center">
           <h2 className="text-4xl font-bold mb-16">How It Works</h2>
           <div className="flex flex-col md:flex-row justify-center gap-12">
@@ -235,7 +251,7 @@ export default function LandingPage() {
       {/* Get Started Section */}
       <section
         id="get-started"
-        className="py-24 bg-gradient-to-r from-primary to-pink-500 text-white text-center"
+        className="py-24 bg-primary text-primary-foreground text-center"
       >
         <div className="container mx-auto px-6">
           <h2 className="text-4xl font-bold mb-6">
@@ -258,9 +274,9 @@ export default function LandingPage() {
             </Button>
             <Button
               size="lg"
-              variant="default"
+              variant="secondary"
               asChild
-              className="bg-black hover:bg-gray-800 hover:scale-105 transition"
+              className="bg-white text-primary hover:scale-105 transition"
             >
               <Link href="/login/admin">
                 <Building className="mr-2" /> Admin Login
@@ -271,19 +287,19 @@ export default function LandingPage() {
       </section>
 
       {/* Footer */}
-      <footer className="py-10 bg-gray-950 border-t border-gray-800 mt-auto">
-        <div className="container mx-auto px-6 text-center text-gray-400 text-sm">
+      <footer className="py-10 bg-muted/80 border-t border-border mt-auto">
+        <div className="container mx-auto px-6 text-center text-muted-foreground text-sm">
           &copy; {new Date().getFullYear()} FixIt Local. All rights reserved.
           <div className="mt-2 space-x-6">
-            <Link href="#" className="hover:text-primary">
+            <Link href="#" className="hover:text-primary transition">
               Privacy
             </Link>
-            <Link href="#" className="hover:text-primary">
+            <Link href="#" className="hover:text-primary transition">
               Terms
             </Link>
             <Link
               href="mailto:contact@fixitlocal.com"
-              className="hover:text-primary"
+              className="hover:text-primary transition"
             >
               Contact Us
             </Link>
@@ -309,7 +325,7 @@ function FeatureCard({
   return (
     <motion.div
       whileHover={{ scale: 1.05, boxShadow: "0 8px 32px 0 rgba(0,0,0,0.25)" }}
-      className="bg-gray-800 rounded-2xl shadow-lg overflow-hidden border border-primary/30 transition-all"
+      className="bg-card rounded-2xl shadow-lg overflow-hidden border border-primary/30 transition-all"
     >
       <div className="relative w-full h-40">
         <Image src={imageUrl} alt={title} fill className="object-cover" />
@@ -319,7 +335,7 @@ function FeatureCard({
           {icon}
         </div>
         <h3 className="text-xl font-semibold mb-2">{title}</h3>
-        <p className="text-gray-300">{description}</p>
+        <p className="text-muted-foreground">{description}</p>
       </div>
     </motion.div>
   );
@@ -338,13 +354,13 @@ function StepCard({
   return (
     <motion.div
       whileHover={{ y: -5, boxShadow: "0 4px 24px 0 rgba(0,0,0,0.15)" }}
-      className="bg-gray-900 p-6 rounded-xl shadow-md border border-primary/20 max-w-xs mx-auto transition-all"
+      className="bg-card p-6 rounded-xl shadow-md border border-primary/20 max-w-xs mx-auto transition-all"
     >
-      <div className="w-14 h-14 mb-4 rounded-full bg-primary text-white flex items-center justify-center text-xl font-bold mx-auto shadow">
+      <div className="w-14 h-14 mb-4 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-xl font-bold mx-auto shadow">
         {number}
       </div>
       <h3 className="text-lg font-semibold mb-2">{title}</h3>
-      <p className="text-gray-400">{description}</p>
+      <p className="text-muted-foreground">{description}</p>
     </motion.div>
   );
 }
@@ -360,12 +376,12 @@ function TestimonialCard({
   text: string;
 }) {
   return (
-    <div className="bg-gray-800 rounded-2xl p-8 shadow-lg max-w-sm mx-auto border border-gray-700 flex flex-col items-center">
+    <div className="bg-card rounded-2xl p-8 shadow-lg max-w-sm mx-auto border border-border flex flex-col items-center">
       <Star className="text-yellow-400 mb-2" />
-      <p className="text-gray-200 italic mb-4">"{text}"</p>
+      <p className="text-muted-foreground italic mb-4">"{text}"</p>
       <div className="flex flex-col items-center">
         <span className="font-semibold text-primary">{name}</span>
-        <span className="text-xs text-gray-400">{role}</span>
+        <span className="text-xs text-muted-foreground">{role}</span>
       </div>
     </div>
   );
