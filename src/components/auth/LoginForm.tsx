@@ -9,7 +9,7 @@ export default function LoginPage() {
     <div className="flex items-center justify-center min-h-screen bg-gray-50">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
-          <CardTitle>Welcome to FixIt Local</CardTitle>
+          <CardTitle>Welcome to FixIt</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid gap-4">

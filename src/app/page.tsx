@@ -47,7 +47,7 @@ export default function LandingPage() {
             className="flex items-center gap-2 text-2xl font-bold text-primary mr-6 hover:opacity-90 transition"
           >
             <ShieldAlert className="h-7 w-7 text-primary" />
-            <span>FixIt Local</span>
+            <span>FixIt</span>
           </Link>
           <nav className="hidden md:flex items-center space-x-4 text-sm font-medium">
             <Link href="/features" className="hover:text-primary transition">
@@ -116,9 +116,9 @@ export default function LandingPage() {
           transition={{ delay: 0.2, duration: 1 }}
           className="max-w-2xl mx-auto text-lg md:text-2xl text-muted-foreground mb-10"
         >
-          FixIt Local connects citizens and authorities for a cleaner, safer,
-          and more vibrant neighborhood. Report, track, and resolve civic issues
-          with ease.
+          FixIt connects citizens and authorities for a cleaner, safer, and more
+          vibrant neighborhood. Report, track, and resolve civic issues with
+          ease.
         </motion.p>
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
@@ -175,7 +175,7 @@ export default function LandingPage() {
       <section id="features" className="py-24 bg-muted/50">
         <div className="container mx-auto px-6">
           <h2 className="text-4xl font-bold text-center mb-16">
-            Why Use FixIt Local?
+            Why Use FixIt?
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
             <FeatureCard
@@ -213,7 +213,7 @@ export default function LandingPage() {
             <TestimonialCard
               name="Priya Verma"
               role="Community Volunteer"
-              text="FixIt Local brings people together. I love tracking progress and seeing real change in my area."
+              text="FixIt brings people together. I love tracking progress and seeing real change in my area."
             />
             <TestimonialCard
               name="Ravi Kumar"
@@ -289,7 +289,7 @@ export default function LandingPage() {
       {/* Footer */}
       <footer className="py-10 bg-muted/80 border-t border-border mt-auto">
         <div className="container mx-auto px-6 text-center text-muted-foreground text-sm">
-          &copy; {new Date().getFullYear()} FixIt Local. All rights reserved.
+          &copy; {new Date().getFullYear()} FixIt. All rights reserved.
           <div className="mt-2 space-x-6">
             <Link href="#" className="hover:text-primary transition">
               Privacy
@@ -298,7 +298,7 @@ export default function LandingPage() {
               Terms
             </Link>
             <Link
-              href="mailto:contact@fixitlocal.com"
+              href="mailto:contact@fixit.com"
               className="hover:text-primary transition"
             >
               Contact Us

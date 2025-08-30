@@ -52,7 +52,7 @@ const Features = () => {
             Powerful Features
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Discover how FixIt Local empowers citizens and authorities to work
+            Discover how FixIt empowers citizens and authorities to work
             together for cleaner, safer communities.
           </p>
         </div>
@@ -76,7 +76,7 @@ const Features = () => {
 
         <div className="mt-16 text-center">
           <h2 className="text-2xl md:text-3xl font-bold mb-6">
-            Why Choose FixIt Local?
+            Why Choose FixIt?
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
             <div className="text-center p-6 bg-muted/50 rounded-lg">

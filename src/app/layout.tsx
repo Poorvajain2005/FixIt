@@ -9,7 +9,7 @@ import Loading from '@/components/Loading';
 import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
-  title: 'FixIt Local',
+  title: 'FixIt',
   description: 'Report and track local issues in your community.',
 };
 

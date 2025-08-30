@@ -116,7 +116,7 @@ export function Navbar({ navItems, userType }: NavbarProps) {
       <div className="container mx-auto px-4 h-16 flex justify-between items-center">
         <Link href={userType === 'Citizen' ? '/citizen/dashboard' : '/admin/dashboard'} className="text-xl font-bold text-primary flex items-center gap-2 hover:opacity-90 transition-opacity">
           <ShieldAlert className="h-6 w-6" />
-          FixIt Local <span className="text-sm font-normal text-muted-foreground ml-1">({userType})</span>
+          FixIt <span className="text-sm font-normal text-muted-foreground ml-1">({userType})</span>
         </Link>
         <div className="flex items-center gap-1">
           {navItems.map((item) => (
